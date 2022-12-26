@@ -19,29 +19,31 @@ const Footer = () => {
   return (
     <div className='footer'>
 
-      <div className="links">
-        <a href='https://github.com'>
-       <GitHubIcon style={{marginRight:'4px'}}/>
-       </a>
-       <a href='https://www.linkedin.com'>
-       <LinkedInIcon />
-       </a>
+      <div className="intructions">
+        <div className="hint">
+          press <kbd>TAB</kbd> to open commands
+        </div>
       </div>
 
-      <div className="themes">
-        <Select
-          options={themeOptions}
-          onChange={handleThemeChange}
-          menuPlacement='top'
-          defaultValue={{ value: defaultTheme, label: defaultTheme.label }}
-        />
+      <div className="actual-footer">
+        <div className="links">
+          <a href='https://github.com'>
+            <GitHubIcon style={{ marginRight: '4px' }} />
+          </a>
+          <a href='https://www.linkedin.com'>
+            <LinkedInIcon />
+          </a>
+        </div>
 
+        <div className="themes">
+          <Select
+            options={themeOptions}
+            onChange={handleThemeChange}
+            menuPlacement='top'
+            defaultValue={{ value: defaultTheme, label: defaultTheme.label }}
+          />
+        </div>
       </div>
-
-
-
-
-
     </div>
   )
 }

@@ -65,9 +65,9 @@ const  darkMagicGirlTheme= {
 
 const  fireTheme= {
     label: 'Fire Theme',
-    background: '#0F0000',
-    title: '#FFFFFF',
-    typeBoxText: '#B31313'
+    background: '#942017',
+    title: '#FFFD55',
+    typeBoxText: '#000854'
 }
 
 export const themeOptions = [
