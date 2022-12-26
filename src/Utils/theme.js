@@ -35,10 +35,51 @@ const miamiNightsTheme = {
     typeBoxText: '#3ABAC0'
 }
 
+const auroraTheme = {
+    label: 'Aurora Theme',
+    background: '#011826',
+    title: '#B3B3B0',
+    typeBoxText: '#005E59'
+}
+
+const bouquetTheme = {
+    label: 'Bouquet Theme',
+    background: '#173F35',
+    title: '#C8E0D2',
+    typeBoxText: '#CE948E'
+}
+
+const bushidoTheme = {
+    label: 'Bushido Theme',
+    background: '#242933',
+    title: '#F6F0E9',
+    typeBoxText: '#C7464F'
+}
+
+const  darkMagicGirlTheme= {
+    label: 'DarkMagicGirl Theme',
+    background: '#091F2C',
+    title: '#A288D9',
+    typeBoxText: '#93E8C8'
+}
+
+const  fireTheme= {
+    label: 'Fire Theme',
+    background: '#0F0000',
+    title: '#FFFFFF',
+    typeBoxText: '#B31313'
+}
+
 export const themeOptions = [
     {value: nebulaTheme, label: 'Nebula Theme'},
     {value: horizonTheme, label: 'Horizon Theme'},
     {value: superUserTheme, label: 'Super User'},
     {value: aetherTheme, label: 'Aether Theme'},
-    {value: miamiNightsTheme, label: 'Miami-Nights Theme'}
+    {value: miamiNightsTheme, label: 'Miami-Nights Theme'},
+    {value: auroraTheme, label: 'Aurora Theme'},
+    {value: bouquetTheme, label: 'Bouquet Theme'},
+    {value:bushidoTheme , label: 'Bushido Theme'},
+    {value: darkMagicGirlTheme, label: 'DarkMagicGirl Theme'},
+    {value:fireTheme , label: 'Fire Theme'}
+
 ];

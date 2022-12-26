@@ -52,7 +52,7 @@ body{
     opacity:0;
 }
 .correct{
-    color:${({theme})=>theme.title};;
+    color:${({theme})=>theme.title};
 }
 .incorrect{
     color:red;
@@ -145,4 +145,79 @@ a{
     cursor: pointer;
 }
 
+.header{
+    display: flex;
+    width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
+    justify-content: space-between;
+}
+
+.github-button{
+    width: 400px;
+    text-align: center;
+    background: blue;
+    height: 3rem;
+    border: 2px solid;
+    border-radius: 10px;
+}
+.user-profile{
+    width: 1000px;
+    margin: auto;
+    display: flex;
+    min-height: 15rem;
+    background: ${({theme})=>theme.typeBoxText};
+    border-radius: 20px;
+    justify-content: center;
+    align-text: center;
+}
+.user{
+    width: 50%;
+    display: flex;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    font-size: 1.5rem;
+    padding: 1rem;
+    border-right: 2px solid;
+}
+.info{
+    width: 60%;
+    padding: 1rem;
+    margin-top: 1rem;
+}
+.picture{
+    width: 40%;
+}
+.total-tests{
+    width: 50%;
+    font-size: 3rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.graph, .table{
+    width: 1000px;
+    margin: auto;
+}
+.center-of-screen{
+    display:flex;
+    min-height:100vh;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-size: 3rem;
+}
+
+.logo{
+    display: flex;
+    gap: 10px;
+}
+.compare-btn{
+    cursor: pointer;
+    color: ${({theme})=>theme.background};
+    background: ${({theme})=>theme.title};
+    padding: 0.3rem;
+    border-radius: 5px;
+    margin-top: -5px;
+}
 `;
