@@ -6,8 +6,8 @@ export const GlobalStyles = createGlobalStyle`
     box-sizing: border-box;
 }
 body{
-    background:${({theme})=>theme.background};
-    color: ${({theme})=>theme.title};
+    background:${({ theme }) => theme.background};
+    color: ${({ theme }) => theme.title};
     padding:0;
     margin:0;
     transition: all 0.25s linear;
@@ -40,7 +40,7 @@ body::-webkit-scrollbar{
     display: flex;
     flex-wrap: wrap;
     align-content:center;
-    color: ${({theme})=>theme.typeBoxText}
+    color: ${({ theme }) => theme.typeBoxText}
 }
 .word{
     margin: 5px;
@@ -50,7 +50,7 @@ body::-webkit-scrollbar{
     opacity:0;
 }
 .correct{
-    color: ${({theme})=>theme.title};
+    color: ${({ theme }) => theme.title};
 }
 .incorrect{
     color: red;
@@ -110,11 +110,11 @@ body::-webkit-scrollbar{
 }
 .title{
     font-size: 20px;
-    color: ${({theme})=>theme.typeBoxText};
+    color: ${({ theme }) => theme.typeBoxText};
 }
 .subtitle{
     font-size: 30px;
-    color: ${({theme})=>theme.title};
+    color: ${({ theme }) => theme.title};
 }
 a{
     text-decoration: none;
@@ -129,14 +129,14 @@ a{
     font-size:1.35rem;
     padding:0.5rem;
 }
-.time-modes{
+.time-modes, .word-modes{
     display:flex;
 }
-.time{
+.time, .no-of-word{
     margin-right:5px;
 }
-.time:hover{
-    color:${({theme})=>theme.typeBoxText};
+.time:hover, .no-of-word:hover{
+    color:${({ theme }) => theme.typeBoxText};
     cursor: pointer;
 }
 .header{
@@ -160,7 +160,7 @@ a{
     margin: auto;
     display: flex;
     min-height: 15rem;
-    background: ${({theme})=>theme.typeBoxText};
+    background: ${({ theme }) => theme.typeBoxText};
     border-radius: 20px;
     justify-content: center;
     align-text: center;
@@ -207,21 +207,62 @@ a{
 }
 .compare-btn{
     cursor: pointer;
-    color: ${({theme})=>theme.background};
-    background: ${({theme})=>theme.title};
+    color: ${({ theme }) => theme.background};
+    background: ${({ theme }) => theme.title};
     padding: 0.3rem;
     border-radius: 5px;
     margin-top: -5px;
 }
 .instruction{
-    color: ${({theme})=>theme.title};
+    color: ${({ theme }) => theme.title};
 }
 .hint{
     kbd{
-        background: ${({theme})=>theme.title};
-        color: ${({theme})=>theme.background};
+        background: ${({ theme }) => theme.title};
+        color: ${({ theme }) => theme.background};
         padding: 2.5px 5px;
         border-radius: 4px; 
     }
+}
+
+.comparison{
+    display:flex;
+    flex-direction:row;
+    padding:2rem;
+    column-gap:30px;
+    text-align:center;
+}
+.graph{
+    margin-top:100px;
+
+}
+
+.mode{
+    cursor: pointer;
+    border-radius: 5px;  
+    padding:5px;
+    color: ${({ theme }) => theme.background};
+    background: ${({ theme }) => theme.title};
+}
+
+.you{
+text-decoration:underline;
+margin-bottom:80px;
+}
+
+.comparingWith{
+    text-decoration:underline;
+    margin-bottom:80px;
+}
+
+.reset{
+    width:90px;
+    height:30px;
+    margin-top:70px;
+    color: ${({ theme }) => theme.background};
+    background: ${({ theme }) => theme.title};
+    cursor: pointer;
+    border-radius: 5px;
+
 }
 `;

@@ -9,20 +9,37 @@ var randomWords = require('random-words');
 const TypingBox = () => {
 
 
-    const [wordsArray, setWordsArray] = useState(() => {
+    const {testSeconds, testWords, testMode} = useTestMode();
+
+    const [wordsArray, setWordsArray] = useState(()=>{
+        if(testMode==='word'){
+            return randomWords(testWords);
+        }
         return randomWords(300);
     });
 
-    const words = useMemo(() => {
+    const words = useMemo(()=>{
         return wordsArray;
-    }, [wordsArray]);
+    },[wordsArray]);
 
-    const { testSeconds } = useTestMode();
+    
 
     const [currCharIndex, setCurrCharIndex] = useState(0);
     const [currWordIndex, setCurrWordIndex] = useState(0);
-    const [countDown, setCountDown] = useState(15);
-    const [testTime, setTestTime] = useState(15);
+    const [countDown, setCountDown] = useState(()=>{
+        if(testMode==='word'){
+            return 180;
+        }
+
+        return testSeconds
+    });
+    const [testTime, setTestTime] = useState(()=>{
+        if(testMode==='word'){
+            return 180;
+        }
+
+        return testSeconds
+    });
     const [correctChars, setCorrectChars] = useState(0);
     const [correctWords, setCorrectWords] = useState(0);
     const [incorrectChars, setIncorrectChar] = useState(0);
@@ -35,20 +52,28 @@ const TypingBox = () => {
     const [open, setOpen] = useState(false);
 
     const inputRef = useRef(null);
-    const wordSpanRef = useMemo(() => {
-        return Array(words.length).fill(0).map(i => createRef(null));
-    }, [words]);
+    const wordSpanRef = useMemo(()=>{
+        return Array(words.length).fill(0).map(i=>createRef(null));
+    },[words]);
 
 
-    const resetTest = () => {
+    const resetTest = ()=>{
         setCurrCharIndex(0);
         setCurrWordIndex(0);
         setTestStart(false);
         setTestEnd(false);
         clearInterval(intervalId);
-        setCountDown(testSeconds);
-        setTestTime(testSeconds);
-        setWordsArray(randomWords(300));
+        
+        if(testMode==='word'){
+            setWordsArray(randomWords(testWords));
+            setCountDown(180);
+            setTestTime(180);
+        }
+        else{
+            setWordsArray(randomWords(300));
+            setCountDown(testSeconds);
+            setTestTime(testSeconds);
+        }
         setGraphData([]);
         setCorrectChars(0);
         setCorrectWords(0);
@@ -59,14 +84,20 @@ const TypingBox = () => {
         focusInput();
     }
 
-    const redoTest = () => {
+    const redoTest = ()=>{
         setCurrCharIndex(0);
         setCurrWordIndex(0);
         setTestStart(false);
         setTestEnd(false);
         clearInterval(intervalId);
-        setCountDown(testSeconds);
-        setTestTime(testSeconds);
+        if(testMode==='word'){
+            setCountDown(180);
+            setTestTime(180);
+        }
+        else{
+            setCountDown(testSeconds);
+            setTestTime(testSeconds);
+        }
         setGraphData([]);
         setCorrectChars(0);
         setCorrectWords(0);
@@ -78,27 +109,27 @@ const TypingBox = () => {
     }
 
 
-    const startTimer = () => {
-
+    const startTimer = ()=>{
+        
         const intervalId = setInterval(timer, 1000);
         setIntervalId(intervalId);
-        function timer() {
-            setCountDown((prevCountDown) => {
+        function timer(){
+            setCountDown((prevCountDown)=>{
 
-                setCorrectChars((correctChars) => {
-                    setGraphData((data) => {
-                        return [...data, [testTime - prevCountDown, Math.round((correctChars / 5) / ((testTime - prevCountDown + 1) / 60))]];
+                setCorrectChars((correctChars)=>{
+                    setGraphData((data)=>{
+                        return [...data, [testTime-prevCountDown,Math.round((correctChars/5)/((testTime-prevCountDown+1)/60))]];
                     });
                     return correctChars;
                 });
 
 
-                if (prevCountDown === 1) {
+                if(prevCountDown===1){
                     setTestEnd(true);
                     clearInterval(intervalId);
                     return 0;
                 }
-                return prevCountDown - 1;
+                return prevCountDown-1;
             });
         }
 
@@ -106,61 +137,66 @@ const TypingBox = () => {
 
 
 
-    const handleKeyDown = (e) => {
+    const handleKeyDown = (e)=>{
 
         console.log(e);
-        if (e.keyCode === 9) {
-            if (testStart) {
+        if(e.keyCode===9){
+            if(testStart){
                 clearInterval(intervalId);
             }
             e.preventDefault();
             setOpen(true);
             return;
         }
-
+        
 
 
         let allChildSpans = wordSpanRef[currWordIndex].current.childNodes;
-
-        if (e.keyCode !== 8 && e.key.length > 1) {
+        
+        if(e.keyCode!==8 && e.key.length>1){
             e.preventDefault();
             return;
         }
 
-        if (!testStart) {
+        if(!testStart){
             startTimer();
             setTestStart(true);
         }
 
-        if (e.keyCode === 32) {
+        if(e.keyCode===32){
+
+            if(currWordIndex===wordsArray.length-1){
+                clearInterval(intervalId);
+                setCurrWordIndex(currWordIndex+1);
+                setTestEnd(true);
+                return;
+            }
+
 
             const correctChars = wordSpanRef[currWordIndex].current.querySelectorAll('.correct');
 
-            if (correctChars.length === allChildSpans.length) {
-
-                setCorrectWords(correctWords + 1);
+            if(correctChars.length === allChildSpans.length){
+                setCorrectWords(correctWords+1);
             }
-            if (allChildSpans.length <= currCharIndex) {
-
-                allChildSpans[currCharIndex - 1].classList.remove('right-current');
+            if(allChildSpans.length<=currCharIndex){
+                allChildSpans[currCharIndex-1].classList.remove('right-current');
             }
-            else {
-                setMissedChars(missedChars + (allChildSpans.length - currCharIndex));
-
-                for (let i = currCharIndex; i < allChildSpans.length; i++) {
-                    allChildSpans[i].className += ' skipped';
+            else{
+                setMissedChars(missedChars+(allChildSpans.length-currCharIndex));
+                for(let i=currCharIndex;i<allChildSpans.length;i++){
+                    allChildSpans[i].className+=' skipped';
                 }
-                allChildSpans[currCharIndex].className = allChildSpans[currCharIndex].className.replace('current', '');
+                allChildSpans[currCharIndex].className = allChildSpans[currCharIndex].className.replace('current','');
 
             }
 
-            if (wordSpanRef[currWordIndex + 1].current.offsetLeft < wordSpanRef[currWordIndex].current.offsetLeft) {
+            if(wordSpanRef[currWordIndex+1].current.offsetLeft < wordSpanRef[currWordIndex].current.offsetLeft){
                 wordSpanRef[currWordIndex].current.scrollIntoView();
             }
 
 
-            wordSpanRef[currWordIndex + 1].current.childNodes[0].className = 'char current';
-            setCurrWordIndex(currWordIndex + 1);
+            wordSpanRef[currWordIndex+1].current.childNodes[0].className = 'char current';
+            setCurrWordIndex(currWordIndex+1);
             setCurrCharIndex(0);
 
 
@@ -168,75 +204,79 @@ const TypingBox = () => {
         }
 
 
-        if (e.keyCode === 8) {
+        if(e.keyCode === 8){
+            
+            if(currCharIndex!==0){
 
-            if (currCharIndex !== 0) {
 
-
-                if (currCharIndex === allChildSpans.length) {
-                    if (allChildSpans[currCharIndex - 1].className.includes('extra')) {
-                        allChildSpans[currCharIndex - 1].remove();
-                        allChildSpans[currCharIndex - 2].className += ' right-current'
+                if(currCharIndex===allChildSpans.length){
+                    if(allChildSpans[currCharIndex-1].className.includes('extra')){
+                        allChildSpans[currCharIndex-1].remove();
+                        allChildSpans[currCharIndex-2].className+=' right-current'
                     }
-                    else {
-                        allChildSpans[currCharIndex - 1].className = 'char current';
+                    else{
+                        allChildSpans[currCharIndex-1].className = 'char current';
                     }
-
-                    setCurrCharIndex(currCharIndex - 1);
+                    
+                    setCurrCharIndex(currCharIndex-1);
                     return;
                 }
 
 
                 allChildSpans[currCharIndex].className = 'char';
-                allChildSpans[currCharIndex - 1].className = 'char current';
-                setCurrCharIndex(currCharIndex - 1);
+                allChildSpans[currCharIndex-1].className = 'char current';
+                setCurrCharIndex(currCharIndex-1);
             }
-
-
-
+            
             return;
         }
 
-        if (currCharIndex === allChildSpans.length) {
+        if(currCharIndex === allChildSpans.length){
 
-            setExtraChars(extraChars + 1);
-            let newSpan = document.createElement('span'); // -> <span></span>
+            setExtraChars(extraChars+1);
+            let newSpan = document.createElement('span'); 
             newSpan.innerText = e.key;
             newSpan.className = 'char incorrect extra right-current';
-            allChildSpans[currCharIndex - 1].classList.remove('right-current');
+            allChildSpans[currCharIndex-1].classList.remove('right-current');
             wordSpanRef[currWordIndex].current.append(newSpan);
-            setCurrCharIndex(currCharIndex + 1);
+            setCurrCharIndex(currCharIndex+1);
             return;
         }
 
-        if (e.key === allChildSpans[currCharIndex].innerText) {
+        if(e.key===allChildSpans[currCharIndex].innerText){
             allChildSpans[currCharIndex].className = 'char correct';
-            setCorrectChars(correctChars + 1);
+            setCorrectChars(correctChars+1);
+            if(currWordIndex===wordsArray.length-1 && currCharIndex===allChildSpans.length-1){
+                clearInterval(intervalId);
+                setCurrWordIndex(currWordIndex+1);
+                setTestEnd(true);
+                return;
+            }
         }
-        else {
+        else{
             allChildSpans[currCharIndex].className = 'char incorrect';
-            setIncorrectChar(incorrectChars + 1);
+            setIncorrectChar(incorrectChars+1);
         }
-        if (currCharIndex + 1 === allChildSpans.length) {
-            allChildSpans[currCharIndex].className += ' right-current';
+        if(currCharIndex+1 === allChildSpans.length){
+            allChildSpans[currCharIndex].className+=' right-current';
         }
-        else {
-            allChildSpans[currCharIndex + 1].className = 'char current';
+        else{
+            allChildSpans[currCharIndex+1].className = 'char current';
         }
-
-        setCurrCharIndex(currCharIndex + 1);
+        
+        setCurrCharIndex(currCharIndex+1);
 
     }
 
-    const handleDialogBoxEvents = (e) => {
+    const handleDialogBoxEvents = (e)=>{
 
-        if (e.keyCode === 32) {
+        if(e.keyCode===32){
             e.preventDefault();
             redoTest();
             setOpen(false);
             return;
         }
-        if (e.keyCode === 9 || e.keyCode === 13) {
+        if(e.keyCode===9 || e.keyCode===13){
             e.preventDefault();
             resetTest();
             setOpen(false);
@@ -248,95 +288,95 @@ const TypingBox = () => {
         startTimer();
     }
 
-    const resetWordSpanRefClassname = () => {
-        wordSpanRef.map(i => {
-            Array.from(i.current.childNodes).map(j => {
+    const resetWordSpanRefClassname = ()=>{
+        wordSpanRef.map(i=>{
+            Array.from(i.current.childNodes).map(j=>{
                 j.className = 'char'
             });
         });
         wordSpanRef[0].current.childNodes[0].className = 'char current';
     }
 
-    const calculateWPM = () => {
-        return Math.round((correctChars / 5) / (testTime / 60))
+    const calculateWPM = ()=>{
+        return Math.round((correctChars/5)/((graphData[graphData.length-1][0]+1)/60))
     }
 
-    const calculateAccuracy = () => {
-        return Math.round((correctWords / currWordIndex) * 100);
+    const calculateAccuracy = ()=>{
+        return Math.round((correctWords/currWordIndex)*100);
     }
 
 
-    const focusInput = () => {
+    const focusInput = ()=>{
         inputRef.current.focus();
     }
 
-    useEffect(() => {
+    useEffect(()=>{
         focusInput();
         wordSpanRef[0].current.childNodes[0].className = 'char current';
-    }, []);
+    },[]);
 
-    useEffect(() => {
+    useEffect(()=>{
         resetTest();
-    }, [testSeconds]);
+    },[testSeconds, testWords, testMode]);
 
 
-    return (
-        <div>
-
-            <UpperMenu countDown={countDown} />
-            {(testEnd) ? (<Stats
-                wpm={calculateWPM()}
-                accuracy={calculateAccuracy()}
-                correctChars={correctChars}
-                incorrectChars={incorrectChars}
-                missedChars={missedChars}
-                extraChars={extraChars}
-                graphData={graphData} />) :
-                (
+  return (
+    <div>
+          
+            <UpperMenu countDown={countDown} currWordIndex={currWordIndex}/>              {(testEnd) ? (<Stats 
+                                wpm={calculateWPM()} 
+                                accuracy={calculateAccuracy()} 
+                                correctChars={correctChars} 
+                                incorrectChars={incorrectChars}
+                                missedChars={missedChars} 
+                                extraChars={extraChars}
+                                graphData={graphData}
+                                resetTest={resetTest}/>) :
+                  (
                     <div className="type-box" onClick={focusInput}>
+                      
+                      <div className="words">
+                          {words.map((word, index) => (
+                              <span className='word' ref={wordSpanRef[index]}>
+                                  {word.split('').map((char, ind) => (
+                                      <span className='char'>{char}</span>
+                                  ))}
+                              </span>
+                          ))}
+                      </div>
+                      </div>
+                  )
+              }
 
-                        <div className="words">
-                            {words.map((word, index) => (
-                                <span className='word' ref={wordSpanRef[index]}>
-                                    {word.split('').map((char, ind) => (
-                                        <span className='char'>{char}</span>
-                                    ))}
-                                </span>
-                            ))}
-                        </div>
-                    </div>
-                )
-            }
+         
+        <input
+            type='text'
+            className='hidden-input'
+            ref={inputRef}
+            onKeyDown={(e)=>handleKeyDown(e)}
+        />
 
-
-            <input
-                type='text'
-                className='hidden-input'
-                ref={inputRef}
-                onKeyDown={(e) => handleKeyDown(e)}
-            />
-
-            <Dialog
-                open={open}
-                style={{
-                    backdropFilter: 'blur(2px)'
-                }}
-                PaperProps={{
-                    style: {
-                        backgroundColor: 'transparent',
-                        boxShadow: 'none'
-                    }
-                }}
-                onKeyDown={handleDialogBoxEvents}
+        <Dialog 
+            open={open}
+            style={{
+                backdropFilter: 'blur(2px)'
+            }}
+            PaperProps={{
+                style: {
+                    backgroundColor:'transparent',
+                    boxShadow: 'none'
+                }
+            }}
+            onKeyDown={handleDialogBoxEvents}
             >
-                <DialogTitle>
-                    <div className="instruction">press SPACE to redo</div>
-                    <div className="instruction">press TAB/ENTER to restart</div>
-                    <div className="instruction">press any other key to exit</div>
-                </DialogTitle>
-            </Dialog>
-        </div>
-    )
+            <DialogTitle>
+                <div className="instruction">press SPACE to redo</div>
+                <div className="instruction">press TAB/ENTER to restart</div>
+                <div className="instruction">press any other key to exit</div>
+            </DialogTitle>
+        </Dialog>
+    </div>
+  )
 }
 
 export default TypingBox

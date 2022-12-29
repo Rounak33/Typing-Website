@@ -4,8 +4,9 @@ import { db, auth } from '../firebaseConfig';
 import { useAlert } from '../Context/AlertContext';
 import { useAuthState } from 'react-firebase-hooks/auth';
 
-const Stats = ({wpm, accuracy, correctChars, incorrectChars, missedChars, extraChars,graphData}) => {
-    var timeSet = new Set();
+const Stats = ({wpm, resetTest, accuracy, correctChars, incorrectChars, missedChars, extraChars,graphData}) => {
+    var timeSet = new Set();  
+    
     const {setAlert} = useAlert();
     const newGraph = graphData.filter((i)=>{
         if(!timeSet.has(i[0])){
@@ -69,6 +70,7 @@ const Stats = ({wpm, accuracy, correctChars, incorrectChars, missedChars, extraC
             <div className="subtitle">{accuracy}%</div>
             <div className="title">Characters</div>
             <div className="subtitle">{correctChars}/{incorrectChars}/{missedChars}/{extraChars}</div>
+            <button className='reset' onClick={resetTest}>Restart</button>
         </div>
         <div className="right-stats">
             <Graph graphData={newGraph}/>

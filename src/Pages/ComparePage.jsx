@@ -30,7 +30,6 @@ const ComparePage = () => {
             });
             setLoggedinUserData(tempData);
             setLoggedinUserGraphData(tempGraphData.reverse());
-            // setDataLoading(false);
         });
 
         let tempData1 = [];
@@ -43,7 +42,6 @@ const ComparePage = () => {
             });
             setCompareUserData(tempData1);
             setCompareUserGraphData(tempGraphData1.reverse());
-            // setDataLoading(false);
         });
 
     }
@@ -52,14 +50,18 @@ const ComparePage = () => {
         getData();
     },[]);
   return (
-    <div>
+    <div className='comparison'>
         <div className="graph">
+            <div className="you">You </div>
             <Graph graphData={loggedinUserGraphData} type='date'/>
+           
         </div>
+        <hr />
         <div className="graph">
+        <div className="comparingWith">{username}</div>
             <Graph graphData={compareUserGraphData} type='date'/>
-        </div>
         
+        </div> 
     </div>
   )
 }

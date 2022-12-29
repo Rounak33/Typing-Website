@@ -69,7 +69,6 @@ const CompareButton = () => {
             <div className='compare-btn' onClick={handleClick}>
                 COMPARE
             </div>
-
             <Modal
                 open={open}
                 onClose={handleClose}
@@ -97,7 +96,7 @@ const CompareButton = () => {
                     </Button>
                 </div>
             </Modal>
-
+            
         </div>
     )
 }
