@@ -265,4 +265,9 @@ margin-bottom:80px;
     border-radius: 5px;
 
 }
+
+@media(min-width:400px)and(max-width:700px){
+    color: ${({ theme }) => theme.background};
+    background: ${({ theme }) => theme.title};
+}
 `;
