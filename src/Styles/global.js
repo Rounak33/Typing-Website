@@ -266,7 +266,7 @@ margin-bottom:80px;
 
 }
 
-@media(min-width:400px)and(max-width:700px){
+@media(min-width:400px){
     color: ${({ theme }) => theme.background};
     background: ${({ theme }) => theme.title};
 }
